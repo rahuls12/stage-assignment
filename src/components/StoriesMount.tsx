@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   StoriesMountProps,
   GlobalCtx,
@@ -84,6 +84,5 @@ StoriesMount.defaultProps = {
   defaultInterval: 4000,
   preloadCount: 1,
 };
-
 
 export default StoriesMount;

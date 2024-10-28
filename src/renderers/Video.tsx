@@ -39,26 +39,30 @@ export const renderer: Renderer = ({
   };
 
   const videoLoaded = () => {
-    messageHandler("UPDATE_VIDEO_DURATION", { duration: vid.current.duration });
+    messageHandler("UPDATE_VIDEO_DURATION", {
+      duration: vid.current && vid.current.duration,
+    });
     setLoaded(true);
-    vid.current
-      .play()
-      .then(() => {
-        action("play");
-      })
-      .catch(() => {
-        setMuted(true);
-        vid.current.play().finally(() => {
+    vid.current &&
+      vid.current
+        .play()
+        .then(() => {
           action("play");
+        })
+        .catch(() => {
+          setMuted(true);
+          vid.current &&
+            vid.current.play().finally(() => {
+              action("play");
+            });
         });
-      });
   };
 
   return (
     <div style={styles.videoContainer}>
       <video
         ref={vid}
-        style={computedStyles}
+        style={computedStyles as React.CSSProperties}
         src={story.url}
         controls={false}
         onLoadedData={videoLoaded}

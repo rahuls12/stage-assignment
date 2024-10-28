@@ -1,22 +1,22 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { ProgressWrapperProps, GlobalCtx } from './../interfaces'
 import GlobalContext from "./../context/Global";
 
 const ProgressWrapper = (props: ProgressWrapperProps) => {
     const { progressWrapperStyles } = useContext<GlobalCtx>(GlobalContext);
-
+    const progressStyle = {
+        ...styles.progress, 
+        ...progressWrapperStyles, 
+        ...getProgressWrapperStyle(props) 
+    };
     return (
-        <div style={{
-            ...styles.progress, 
-            ...progressWrapperStyles, 
-            ...getProgressWrapperStyle(props) 
-        }}>
+        <div style={progressStyle as unknown as React.CSSProperties}>
             {props.children}
         </div>
     )
 }
 
-const getProgressWrapperStyle = ({ width }) => ({
+const getProgressWrapperStyle = ({ width }: { width: number }) => ({
     width: `${width * 100}%`,
 })
 

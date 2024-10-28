@@ -6,7 +6,10 @@ export const renderer: Renderer = (props) => {
         props.action('play');
     }, [props.story])
     const Content = props.story.originalContent;
-    return <Content {...props} />
+    if (typeof Content === 'function') {
+        return <Content {...props} />
+    }
+    return null;
 }
 
 export const tester: Tester = (story) => {

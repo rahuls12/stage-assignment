@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import Progress from "./Progress";
 import {
   ProgressContext,
@@ -16,12 +16,8 @@ export default () => {
 
   const { currentId, next, videoDuration, pause, bufferAction } =
     useContext<ProgressContext>(ProgressCtx);
-  const {
-    defaultInterval,
-    onStoryEnd,
-    onStoryStart,
-    progressContainerStyles,
-  } = useContext<GlobalCtx>(GlobalContext);
+  const { defaultInterval, onStoryEnd, onStoryStart, progressContainerStyles } =
+    useContext<GlobalCtx>(GlobalContext);
   const { stories } = useContext<StoriesContextInterface>(StoriesContext);
 
   useEffect(() => {
@@ -34,7 +30,8 @@ export default () => {
       lastTime.current = timestamp();
     }
     return () => {
-      cancelAnimationFrame(animationFrameId.current);
+      if (animationFrameId.current)
+        cancelAnimationFrame(animationFrameId.current);
     };
   }, [currentId, pause]);
 
@@ -49,14 +46,17 @@ export default () => {
     lastTime.current = t;
     setCount((count: number) => {
       const interval = getCurrentInterval();
-      countCopy = count + (dt * 100) / interval;
+      if (interval) {
+        countCopy = count + (dt * 100) / interval;
+      }
       return countCopy;
     });
     if (countCopy < 100) {
       animationFrameId.current = requestAnimationFrame(incrementCount);
     } else {
       storyEndCallback();
-      cancelAnimationFrame(animationFrameId.current);
+      if (animationFrameId.current)
+        cancelAnimationFrame(animationFrameId.current);
       next();
     }
   };
@@ -81,11 +81,15 @@ export default () => {
   };
 
   return (
-    <div style={{
-      ...styles.progressArr,
-      ...progressContainerStyles,
-      ...opacityStyles
-    }}>
+    <div
+      style={
+        {
+          ...styles.progressArr,
+          ...progressContainerStyles,
+          ...opacityStyles,
+        } as React.CSSProperties
+      }
+    >
       {stories.map((_, i) => (
         <Progress
           key={i}
