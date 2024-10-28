@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { ProgressProps, ProgressContext, GlobalCtx } from './../interfaces'
 import ProgressWrapper from './ProgressWrapper'
 import GlobalContext from "./../context/Global";

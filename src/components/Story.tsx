@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { StoryProps, GlobalCtx } from "./../interfaces";
 import GlobalContext from "./../context/Global";
 
@@ -26,13 +26,17 @@ const Story = (props: StoryProps) => {
     let InnerContent = props.story.content;
     let config = { width, height, loader, header, storyStyles };
     return (
-      <InnerContent
-        action={props.action}
-        isPaused={props.playState}
-        story={props.story}
-        config={config}
-        messageHandler={rendererMessageHandler}
-      />
+      InnerContent && (
+        <InnerContent
+          action={props.action}
+          isPaused={props.playState}
+          story={props.story}
+          config={config}
+          messageHandler={(type, data) =>
+            rendererMessageHandler(type, data) || { ack: "ERROR" }
+          }
+        />
+      )
     );
   };
 

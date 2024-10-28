@@ -1,4 +1,3 @@
-import React from "react";
 import { HeaderProps } from "./../interfaces";
 
 const Header = ({ profileImage, heading, subheading }: HeaderProps) => (

@@ -36,7 +36,7 @@ export default function () {
   } = useContext<GlobalCtx>(GlobalContext);
   const { stories } = useContext<StoriesContextInterface>(StoriesContext);
 
-  usePreLoader(stories, currentId, preloadCount);
+  usePreLoader(stories, currentId, preloadCount ? preloadCount : 0);
 
   useEffect(() => {
     if (typeof currentIndex === "number") {
@@ -50,7 +50,6 @@ export default function () {
       }
     }
   }, [currentIndex]);
-
 
   useEffect(() => {
     if (typeof isPaused === "boolean") {
@@ -85,7 +84,7 @@ export default function () {
     setBufferAction(!!bufferAction);
   };
 
-  const setCurrentIdWrapper = (callback) => {
+  const setCurrentIdWrapper = (callback: React.SetStateAction<number>) => {
     setCurrentId(callback);
     toggleState("pause", true);
   };
@@ -128,15 +127,14 @@ export default function () {
     });
   };
 
-  const debouncePause = (e: React.MouseEvent | React.TouchEvent) => {
+  const debouncePause = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     e.preventDefault();
     mousedownId.current = setTimeout(() => {
       toggleState("pause");
     }, 200);
   };
-
   const mouseUp =
-    (type: string) => (e: React.MouseEvent | React.TouchEvent) => {
+    (type: string) => (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
       e.preventDefault();
       mousedownId.current && clearTimeout(mousedownId.current);
       if (pause) {
@@ -204,7 +202,7 @@ const styles = {
     flexDirection: "column" as const,
     background: "#111",
     position: "relative" as const,
-    WebkitUserSelect: 'none' as const,
+    WebkitUserSelect: "none" as const,
   },
   overlay: {
     position: "absolute" as const,
