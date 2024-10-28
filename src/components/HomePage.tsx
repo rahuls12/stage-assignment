@@ -1,15 +1,30 @@
+import { useState } from "preact/hooks";
 import InstagramLogo from "./../assets/Instagram.png";
 import ProfileImage from "./ProfileImage";
-
-const staticFriends = [
-  { name: "Ravinder", url: "/Ravinder.jpg" },
-  { name: "Tara", url: "/Tara.jpg" },
-  { name: "Ankit", url: "/Ankit.jpg" },
-  { name: "Deepak", url: "/Deepak.jpg" },
-  { name: "Soumya", url: "/Soumya.jpg" },
-];
+import StoriesMount from "./StoriesMount";
+import { staticFriends } from "../data";
 
 export default function HomePage() {
+  const [storyRunning, setStoryRunning] = useState(false);
+  const [stories, setStories] = useState<Object[]>([]);
+  const handleOnClick = (stories: Object[]) => {
+    setStories(stories);
+    setStoryRunning(true);
+  };
+
+  if (storyRunning) {
+    return (
+      <>
+        <StoriesMount
+          stories={stories}
+          onAllStoriesEnd={() => {
+            setStoryRunning(false);
+          }}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <header>
@@ -17,7 +32,12 @@ export default function HomePage() {
       </header>
       <section style={{ display: "flex", flexDirection: "row" }}>
         {staticFriends.map((f) => (
-          <div style={{ margin: "1.5%", cursor: "pointer" }}>
+          <div
+            style={{ margin: "1.5%", cursor: "pointer" }}
+            onClick={() => {
+              handleOnClick(f.stories);
+            }}
+          >
             <ProfileImage url={f.url} />
             <p
               style={{
